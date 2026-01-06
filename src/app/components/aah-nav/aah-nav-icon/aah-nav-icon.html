@@ -1,0 +1,13 @@
+<div class="slider">
+  <div class="item">
+    <div
+      class="block"
+      [style]="{ backgroundImage: 'url(' + svgURL + ')' }"
+      (mousemove)="onBlockMouseMove($event, block)"
+      (mouseleave)="onBlockMouseLeave()"
+      #block
+    >
+      <span class="circleLight"></span>
+    </div>
+  </div>
+</div>
