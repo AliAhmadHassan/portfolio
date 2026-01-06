@@ -1,25 +1,25 @@
 
 <nav>
-  <ul>
-    <li>
+  <ul class="dock" (mousemove)="onDockMouseMove($event)" (mouseleave)="onDockMouseLeave()">
+    <li #dockItem>
       <aah-nav-icon svgURL="/static/images/home.svg"></aah-nav-icon>
     </li>
-    <li>
+    <li #dockItem>
       <aah-nav-icon svgURL="/static/images/about.svg"></aah-nav-icon>
     </li>
-    <li>
+    <li #dockItem>
       <aah-nav-icon svgURL="/static/images/work.svg"></aah-nav-icon>
     </li>
-    <li>
+    <li #dockItem>
       <aah-nav-icon svgURL="/static/images/portfolio.svg"></aah-nav-icon>
     </li>
-    <li>
+    <li #dockItem>
       <aah-nav-icon svgURL="/static/images/contact.svg"></aah-nav-icon>
     </li>
-    <li>
+    <li #dockItem>
       <aah-nav-icon svgURL="/static/images/linkedin.svg"></aah-nav-icon>
     </li>
-    <li>
+    <li #dockItem>
       <aah-nav-icon svgURL="/static/images/github.svg"></aah-nav-icon>
     </li>
   </ul>
