@@ -13,28 +13,4 @@ export class AahNavIcon implements OnInit, OnDestroy {
   ngOnDestroy(): void {}
 
   ngOnInit(): void {}
-
-  protected onBlockMouseMove(ev: MouseEvent, blockEl: HTMLElement): void {
-    const rect = blockEl.getBoundingClientRect();
-
-    // pageX/pageY -> client coords correction for scroll
-    const clientX = ev.pageX - window.scrollX;
-    const clientY = ev.pageY - window.scrollY;
-
-    const mouseX = clientX - rect.left - rect.width / 2;
-    const mouseY = clientY - rect.top - rect.height / 2;
-
-    const el = blockEl.querySelector<HTMLElement>('.circleLight');
-    if (el) {
-      el.style.background = `radial-gradient(circle at ${mouseX}px ${mouseY}px, #fff, transparent)`;
-    }
-
-  }
-
-  public onBlockMouseLeave(blockEl: HTMLElement): void {
-    const el = blockEl.querySelector<HTMLElement>('.circleLight');
-    if (el) {
-      el.style.removeProperty('background');
-    }
-  }
 }

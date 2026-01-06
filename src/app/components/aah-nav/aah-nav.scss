@@ -11,10 +11,27 @@ ul.dock {
   flex-direction: column;
   align-items: center;
   overflow: visible;
-  border: 1px solid black;
+  position: relative;
+  isolation: isolate;
   width: 60px;
-  background-color: #FFFFFF40;
+}
+
+ul.dock::before {
+  content: '';
+  position: absolute;
+  left: calc(-1 * var(--dock-extra-left, 0px));
+  top: calc(-1 * var(--dock-extra-top, 0px));
+  width: calc(100% + var(--dock-extra-left, 0px) + var(--dock-extra-right, 0px));
+  height: calc(100% + var(--dock-extra-top, 0px) + var(--dock-extra-bottom, 0px));
+  background-color: #a7a0a090;
   border-radius: 30px;
+  pointer-events: none;
+  transition:
+    width 140ms ease-out,
+    height 140ms ease-out,
+    left 140ms ease-out,
+    top 140ms ease-out;
+  z-index: 0;
 }
 
 ul.dock > li {
@@ -24,6 +41,7 @@ ul.dock > li {
   transform: translateY(var(--dock-shift, 0px));
   transition: transform 140ms ease-out;
   will-change: transform;
+  z-index: 1;
 }
 
 ul.dock > li + li {

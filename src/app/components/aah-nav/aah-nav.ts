@@ -35,15 +35,24 @@ export class AahNav implements AfterViewInit {
 
     const pointerX = ev.clientX;
     const pointerY = ev.clientY;
-    const maxScale = 2.5;
+    const maxScale = 2;
     const baseScale = 0.9;
     const sigma = 100;
     const spread = 0.2;
+    const dockEl = ev.currentTarget as HTMLElement | null;
+    let dockRect: DOMRect | null = null;
+    if (dockEl) {
+      dockRect = dockEl.getBoundingClientRect();
+    }
 
     const scales: number[] = [];
     const rects: DOMRect[] = [];
     let closestIndex = 0;
     let closestDistance = Number.POSITIVE_INFINITY;
+    let minTop = dockRect ? dockRect.top : Number.POSITIVE_INFINITY;
+    let maxBottom = dockRect ? dockRect.bottom : Number.NEGATIVE_INFINITY;
+    let minLeft = dockRect ? dockRect.left : Number.POSITIVE_INFINITY;
+    let maxRight = dockRect ? dockRect.right : Number.NEGATIVE_INFINITY;
 
     for (let i = 0; i < this.itemEls.length; i++) {
       const el = this.itemEls[i];
@@ -63,13 +72,18 @@ export class AahNav implements AfterViewInit {
 
       const scale = baseScale + (maxScale - baseScale) * t;
       scales[i] = scale;
-      if (distance < closestDistance) {
+      /*       if (distance < closestDistance) {
         closestDistance = distance;
         closestIndex = i;
-      }
+      } */
 
       target.style.setProperty('--dock-scale', scale.toFixed(3));
       el.style.zIndex = String(Math.round(scale * 100));
+
+      minTop = Math.min(minTop, rect.top);
+      maxBottom = Math.max(maxBottom, rect.bottom);
+      minLeft = Math.min(minLeft, rect.left);
+      maxRight = Math.max(maxRight, rect.right);
     }
 
     const extras = scales.map((scale, i) => {
@@ -96,6 +110,16 @@ export class AahNav implements AfterViewInit {
     for (let i = 0; i < this.itemEls.length; i++) {
       this.itemEls[i].style.setProperty('--dock-shift', `${shifts[i].toFixed(1)}px`);
     }
+
+    if (dockEl && dockRect) {
+      const extraTop = Math.max(dockRect.top - 20 - minTop, 0);
+      const extraBottom = Math.max(maxBottom - dockRect.bottom, 0);
+      const extraLeft = Math.max(dockRect.left - minLeft, 0);
+
+      dockEl.style.setProperty('--dock-extra-top', `${extraTop.toFixed(1)}px`);
+      dockEl.style.setProperty('--dock-extra-bottom', `${extraBottom.toFixed(1)}px`);
+      dockEl.style.setProperty('--dock-extra-left', `${extraLeft.toFixed(1)}px`);
+    }
   }
 
   protected onDockMouseLeave(): void {
@@ -107,6 +131,14 @@ export class AahNav implements AfterViewInit {
 
       el.style.removeProperty('--dock-shift');
       el.style.removeProperty('z-index');
+    }
+
+    const dockEl = this.itemEls[0]?.closest('ul.dock') as HTMLElement;
+    if (dockEl) {
+      dockEl.style.removeProperty('--dock-extra-top');
+      dockEl.style.removeProperty('--dock-extra-bottom');
+      dockEl.style.removeProperty('--dock-extra-left');
+      dockEl.style.removeProperty('--dock-extra-right');
     }
   }
 
